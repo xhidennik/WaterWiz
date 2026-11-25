@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WaterWiz - Склад</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/text.css">
+    <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-hidden="true">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-seedling"></i>
+                    Water<span>Wiz</span>
+                </div>
+                <label for="navToggle" class="burger-btn" aria-label="Меню"><i class="fas fa-bars"></i></label>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="about.html" class="nav-link">О нас</a></li>
+                        <li><a href="dashboard.html" class="nav-link">Дашборд</a></li>
+                        <li><a href="storage.html" class="nav-link active">Склад</a></li>
+                        <li><a href="water.html" class="nav-link">Полив</a></li>
+                        <li><a href="admin.html" class="nav-link">Админка</a></li>
+                    </ul>
+                </nav>
+                <div class="user-panel">
+                    <a href="user.html" class="user-avatar-link" title="Личный кабинет">
+                        <div class="user-avatar">Г</div>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-overlay">
+                <label for="navToggle" class="nav-close" aria-label="Закрыть"><i class="fas fa-times"></i></label>
+                <div class="nav-overlay-avatar">
+                    <a href="user.html"><div class="user-avatar">Г</div></a>
+                </div>
+                <ul class="nav-overlay-list">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="dashboard.html">Дашборд</a></li>
+                    <li><a href="storage.html">Склад</a></li>
+                    <li><a href="water.html">Полив</a></li>
+                    <li><a href="admin.html">Админка</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content area -->
+    <main class="container">
+        <!-- Warehouse Page -->
+        <section id="warehouse" class="page active">
+            <h1 class="page-title"><i class="fas fa-warehouse"></i>Склад фермы "Джей Джи Си Эвергрин"</h1>
+
+            <div class="warehouse-tabs">
+                <div class="warehouse-tab active" data-tab="inventory">Инвентарный склад</div>
+                <div class="warehouse-tab" data-tab="products">Продукция фермы</div>
+            </div>
+
+            <div id="inventory" class="warehouse-content active">
+                <div class="card">
+                    <h2 class="card-heading">Инвентарь и материалы</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Ед. изм.</th>
+                                <th>Состояние</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="products" class="warehouse-content">
+                <div class="card">
+                    <h2 class="card-heading">Готовая продукция</h2>
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th class="products-table__img">Фото</th>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Ед. изм.</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>WaterWiz &copy; 2026 - Простая 1С для грядок | Ферма "Джей Джи Си Эвергрин"</p>
+            <p style="margin-top: 8px; font-size: 14px; opacity: 0.8;">Демонстрационная версия системы управления сельскохозяйственным производством</p>
+        </div>
+    </footer>
+
+    <script src="js/data-products.js"></script>
+    <script src="js/data-storage.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/global.js"></script>
+</body>
+</html>

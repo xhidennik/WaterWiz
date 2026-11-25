@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WaterWiz - Админка</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/text.css">
+    <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-hidden="true">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-seedling"></i>
+                    Water<span>Wiz</span>
+                </div>
+                <label for="navToggle" class="burger-btn" aria-label="Меню"><i class="fas fa-bars"></i></label>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="about.html" class="nav-link">О нас</a></li>
+                        <li><a href="dashboard.html" class="nav-link">Дашборд</a></li>
+                        <li><a href="storage.html" class="nav-link">Склад</a></li>
+                        <li><a href="water.html" class="nav-link">Полив</a></li>
+                        <li><a href="admin.html" class="nav-link active">Админка</a></li>
+                    </ul>
+                </nav>
+                <div class="user-panel">
+                    <a href="user.html" class="user-avatar-link" title="Личный кабинет">
+                        <div class="user-avatar">Г</div>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-overlay">
+                <label for="navToggle" class="nav-close" aria-label="Закрыть"><i class="fas fa-times"></i></label>
+                <div class="nav-overlay-avatar">
+                    <a href="user.html"><div class="user-avatar">Г</div></a>
+                </div>
+                <ul class="nav-overlay-list">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="dashboard.html">Дашборд</a></li>
+                    <li><a href="storage.html">Склад</a></li>
+                    <li><a href="water.html">Полив</a></li>
+                    <li><a href="admin.html">Админка</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="admin" class="page active">
+            <h1 class="page-title"><i class="fas fa-user-shield"></i>Администрирование системы</h1>
+
+            <!-- График загрузки RAM и CPU -->
+            <div class="card">
+                <h2 class="card-heading">Загрузка ресурсов (RAM / CPU)</h2>
+                <div class="chart-container chart-container--sm">
+                    <canvas id="resourcesLoadChart"></canvas>
+                </div>
+            </div>
+
+            <div class="admin-grid">
+                <!-- Прогресс диска + системная информация -->
+                <div class="card">
+                    <h2 class="card-heading">Дисковое пространство</h2>
+                    <div class="disk-usage">
+                        <div class="disk-usage__label">
+                            <span>Занято</span>
+                            <span id="diskPercent" class="disk-usage__value">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="diskProgress" class="progress-bar__fill" style="width: 0%"></div>
+                        </div>
+                        <div class="disk-usage__meta">
+                            <span id="diskUsed">0 ГБ</span> из <span id="diskTotal">128 ГБ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Системная информация (расширенная) -->
+                <div class="card">
+                    <h2 class="card-heading">Системная информация</h2>
+                    <div class="sys-info" id="sysInfo">
+                        <div class="sys-info__row"><span class="sys-info__key">Версия системы</span><span class="sys-info__val" id="sysVersion">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">Сервер</span><span class="sys-info__val" id="sysServer">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">ОС</span><span class="sys-info__val" id="sysOs">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">Uptime</span><span class="sys-info__val" id="sysUptime">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">Статус</span><span class="sys-info__val sys-info__val--ok" id="sysStatus">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">Активных сессий</span><span class="sys-info__val" id="sysSessions">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">Запросов/мин</span><span class="sys-info__val" id="sysRpm">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">Резервная копия</span><span class="sys-info__val" id="sysBackup">—</span></div>
+                        <div class="sys-info__row"><span class="sys-info__key">След. обновление</span><span class="sys-info__val" id="sysNextUpdate">—</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Лог событий -->
+            <div class="card">
+                <h2 class="card-heading">Лог событий</h2>
+                <div class="event-log" id="eventLog"></div>
+            </div>
+
+            <!-- Серверные ресурсы (карточки) -->
+            <div class="card">
+                <h2 class="card-heading">Серверные ресурсы</h2>
+                <div class="server-stats">
+                    <div class="server-stat">
+                        <i class="fas fa-memory"></i>
+                        <div class="server-stat-value" id="statRam">2 ГБ</div>
+                        <div class="server-stat-label">Оперативная память</div>
+                    </div>
+                    <div class="server-stat">
+                        <i class="fas fa-microchip"></i>
+                        <div class="server-stat-value" id="statCpu">2 ядра</div>
+                        <div class="server-stat-label">Процессор</div>
+                    </div>
+                    <div class="server-stat">
+                        <i class="fas fa-hdd"></i>
+                        <div class="server-stat-value" id="statDisk">128 ГБ</div>
+                        <div class="server-stat-label">Диск</div>
+                    </div>
+                    <div class="server-stat">
+                        <i class="fas fa-network-wired"></i>
+                        <div class="server-stat-value" id="statNetwork">1 Гбит/с</div>
+                        <div class="server-stat-label">Сеть</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сотрудники -->
+            <div class="card">
+                <h2 class="card-heading">Сотрудники фермы "Джей Джи Си Эвергрин"</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ФИО</th>
+                            <th>Должность</th>
+                            <th>Статус</th>
+                            <th>Последний вход</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Генадич</td>
+                            <td>Главный агроном</td>
+                            <td><span class="status status-success">Активен</span></td>
+                            <td>28.01.2026 08:45</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-success"><i class="fas fa-key"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Иван Иваныч</td>
+                            <td>Тракторист</td>
+                            <td><span class="status status-success">Активен</span></td>
+                            <td>28.01.2026 07:30</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-success"><i class="fas fa-key"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Пётр Петров</td>
+                            <td>Складской работник</td>
+                            <td><span class="status status-success">Активен</span></td>
+                            <td>28.01.2026 09:15</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-success"><i class="fas fa-key"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Мария Сидорова</td>
+                            <td>Молочница</td>
+                            <td><span class="status status-info">Неактивен</span></td>
+                            <td>15.01.2026 14:20</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-success"><i class="fas fa-key"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Алексей Козлов</td>
+                            <td>Ветеринар</td>
+                            <td><span class="status status-warning">Отпуск</span></td>
+                            <td>20.01.2026 10:05</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-success"><i class="fas fa-key"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>WaterWiz &copy; 2026 - Простая 1С для грядок | Ферма "Джей Джи Си Эвергрин"</p>
+            <p style="margin-top: 8px; font-size: 14px; opacity: 0.8;">Демонстрационная версия системы управления сельскохозяйственным производством</p>
+        </div>
+    </footer>
+
+    <script src="js/data-admin.js"></script>
+    <script src="js/global.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

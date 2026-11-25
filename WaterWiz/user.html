@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WaterWiz - Личный кабинет</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/text.css">
+    <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-hidden="true">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-seedling"></i>
+                    Water<span>Wiz</span>
+                </div>
+                <label for="navToggle" class="burger-btn" aria-label="Меню"><i class="fas fa-bars"></i></label>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="about.html" class="nav-link">О нас</a></li>
+                        <li><a href="dashboard.html" class="nav-link">Дашборд</a></li>
+                        <li><a href="storage.html" class="nav-link">Склад</a></li>
+                        <li><a href="water.html" class="nav-link">Полив</a></li>
+                        <li><a href="admin.html" class="nav-link">Админка</a></li>
+                    </ul>
+                </nav>
+                <div class="user-panel">
+                    <a href="user.html" class="user-avatar-link" title="Личный кабинет">
+                        <div class="user-avatar">Г</div>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-overlay">
+                <label for="navToggle" class="nav-close" aria-label="Закрыть"><i class="fas fa-times"></i></label>
+                <div class="nav-overlay-avatar">
+                    <a href="user.html"><div class="user-avatar">Г</div></a>
+                </div>
+                <ul class="nav-overlay-list">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="dashboard.html">Дашборд</a></li>
+                    <li><a href="storage.html">Склад</a></li>
+                    <li><a href="water.html">Полив</a></li>
+                    <li><a href="admin.html">Админка</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page active">
+            <h1 class="page-title"><i class="fas fa-user-circle"></i>Личный кабинет</h1>
+
+            <div class="profile-header card">
+                <div class="profile-header__inner">
+                    <div class="profile-avatar">Г</div>
+                    <div class="profile-header__info">
+                        <h2 class="profile-name">Генадич</h2>
+                        <p class="profile-role">Главный агроном</p>
+                        <p class="profile-org">Ферма «Джей Джи Си Эвергрин»</p>
+                        <span class="status status-success profile-status">В сети</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <div class="card">
+                    <h2 class="card-heading"><i class="fas fa-address-card"></i> Контактная информация</h2>
+                    <ul class="profile-list">
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:genadich@everygreen.local">genadich@everygreen.local</a></li>
+                        <li><i class="fas fa-phone"></i> +7 (XXX) XXX-XX-XX</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Участок №1, каб. 3</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2 class="card-heading"><i class="fas fa-clock"></i> Активность</h2>
+                    <ul class="profile-list">
+                        <li><strong>Последний вход:</strong> 12.02.2026, 09:15</li>
+                        <li><strong>В системе с:</strong> 15.03.2024</li>
+                        <li><strong>Всего входов в этом месяце:</strong> 18</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-heading"><i class="fas fa-info-circle"></i> О себе</h2>
+                <p class="profile-bio">
+                    Главный агроном фермы. Отвечаю за планирование посевов, контроль полива и подкормок, учёт урожая. 
+                    Работаю с модулями «Склад», «Полив» и отчётами дашборда.
+                </p>
+            </div>
+
+            <div class="card">
+                <h2 class="card-heading"><i class="fas fa-key"></i> Безопасность и доступ</h2>
+                <div class="profile-list">
+                    <p><strong>Роль в системе:</strong> Агроном (расширенный доступ к складу и поливу)</p>
+                    <p><strong>Пароль изменён:</strong> 20.01.2026</p>
+                </div>
+                <button type="button" class="btn btn-primary"><i class="fas fa-lock"></i> Сменить пароль</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>WaterWiz &copy; 2026 - Простая 1С для грядок | Ферма "Джей Джи Си Эвергрин"</p>
+            <p style="margin-top: 8px; font-size: 14px; opacity: 0.8;">Демонстрационная версия системы управления сельскохозяйственным производством</p>
+        </div>
+    </footer>
+</body>
+</html>

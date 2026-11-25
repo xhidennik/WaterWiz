@@ -1,0 +1,143 @@
+/**
+ * Мобильная версия (ширина < 600px): бургер-меню и горизонтальный скролл таблиц.
+ */
+
+.nav-toggle-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+
+@media (max-width: 600px) {
+    /* --- Шапка: лого слева, бургер справа --- */
+    .header-content {
+        flex-direction: row;
+    }
+
+    header .container {
+        position: relative;
+    }
+
+    .burger-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        margin-left: auto;
+        color: var(--white);
+        font-size: 22px;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    header nav,
+    header .user-panel {
+        display: none !important;
+    }
+
+    /* --- Оверлей меню: зелёный экран, крестик на месте бургера --- */
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--dark), var(--primary));
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px 30px;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .nav-toggle-input:checked ~ .nav-overlay {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .nav-close {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 2001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        color: var(--white);
+        font-size: 26px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-overlay-avatar {
+        margin-bottom: 30px;
+    }
+
+    .nav-overlay-avatar .user-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
+        margin-left: 0;
+    }
+
+    .nav-overlay-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .nav-overlay-list li {
+        margin-bottom: 8px;
+    }
+
+    .nav-overlay-list a {
+        display: block;
+        color: var(--white);
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: 500;
+        padding: 14px 24px;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+    }
+
+    .nav-overlay-list a:hover,
+    .nav-overlay-list a:focus {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Скрыть бургер, когда меню открыто (под оверлеем крестик) */
+    .nav-toggle-input:checked ~ .header-content .burger-btn {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* --- Широкие таблицы: горизонтальный скролл --- */
+    .card:has(table) {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .card:has(table) table {
+        min-width: 400px;
+    }
+}

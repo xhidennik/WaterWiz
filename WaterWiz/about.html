@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WaterWiz - О нас</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/tiny-slider/css/tiny-slider.css">
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/text.css">
+    <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-hidden="true">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-seedling"></i>
+                    Water<span>Wiz</span>
+                </div>
+                <label for="navToggle" class="burger-btn" aria-label="Меню"><i class="fas fa-bars"></i></label>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="about.html" class="nav-link active">О нас</a></li>
+                        <li><a href="dashboard.html" class="nav-link">Дашборд</a></li>
+                        <li><a href="storage.html" class="nav-link">Склад</a></li>
+                        <li><a href="water.html" class="nav-link">Полив</a></li>
+                        <li><a href="admin.html" class="nav-link">Админка</a></li>
+                    </ul>
+                </nav>
+                <div class="user-panel">
+                    <a href="user.html" class="user-avatar-link" title="Личный кабинет">
+                        <div class="user-avatar">Г</div>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-overlay">
+                <label for="navToggle" class="nav-close" aria-label="Закрыть"><i class="fas fa-times"></i></label>
+                <div class="nav-overlay-avatar">
+                    <a href="user.html"><div class="user-avatar">Г</div></a>
+                </div>
+                <ul class="nav-overlay-list">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="dashboard.html">Дашборд</a></li>
+                    <li><a href="storage.html">Склад</a></li>
+                    <li><a href="water.html">Полив</a></li>
+                    <li><a href="admin.html">Админка</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page active">
+            <h1 class="page-title"><i class="fas fa-info-circle"></i>О нас</h1>
+
+            <div class="card about-intro">
+                <h2 class="card-heading">О системе WaterWiz</h2>
+                <p>WaterWiz — демонстрационная система учёта и управления для тепличного и фермерского хозяйства. Она объединяет дашборд с показателями урожая и полива, склад инвентаря и продукции, календарь задач и полива, а также блок администрирования. Проект создан как «цифровое» решение для реальных производственных процессов тепличного комплекса.</p>
+            </div>
+
+            <div class="card">
+                <h2 class="card-heading">Фотогалерея</h2>
+                <div class="about-slider-wrap">
+                    <div class="about-slider">
+                        <div class="about-slider__item"><img src="img/about/1.jpg" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="img/about/2.jpg" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="img/about/3.jpg" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="img/about/4.jpg" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="img/about/5.jpg" alt="JGC Evergreen"></div>
+                    </div>
+                    
+                    <div class="slider-nav">
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-heading">О компании</h2>
+                <div class="about-text">
+                    <p><strong>JGC Evergreen</strong> («Джей Джи Си Эвергрин») — один из ведущих локальных производителей свежих овощей и зелени в Хабаровском крае.</p>
+                    <p>Основная деятельность — полный цикл выращивания и реализации экологически чистой овощной продукции и зелени в теплицах четвертого поколения. Компания работает с 2016 года и постоянно расширяет ассортимент, который на сегодня включает 5 видов овощей и 15 сортов зелени.</p>
+                    <p>Компания работает с 2016 года, применяя современные экологичные технологии (например, использование энтомофагов для защиты растений). Продукция JGC Evergreen, отмеченная знаком «Хабаровская марка», поставляется в крупные торговые сети и магазины не только Хабаровска, но и других регионов Дальнего Востока.</p>
+                    <p>Сотрудничество с таким прогрессивным предприятием позволило нашей команде погрузиться в реальные производственные процессы, понять существующие проблемы в учёте, контроле и логистике внутри тепличного хозяйства и предложить собственное, «цифровое» решение.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>WaterWiz &copy; 2026 - Простая 1С для грядок | Ферма "Джей Джи Си Эвергрин"</p>
+            <p style="margin-top: 8px; font-size: 14px; opacity: 0.8;">Демонстрационная версия системы управления сельскохозяйственным производством</p>
+        </div>
+    </footer>
+
+    <script src="assets/tiny-slider/js/tiny-slider.js"></script>
+    <script>
+        var slider = tns({
+            container: '.about-slider',
+
+            controls: false,
+            navPosition: 'bottom',
+            navContainer: '.slider-nav',
+            navAsThumbnails: true,
+
+            items: 1,
+            gutter: 20,
+
+            autoplay: false,
+            autoplayTimeout: 3500,
+
+            arrowKeys: true,
+            mouseDrag: true,
+
+            "responsive": {
+                "600": {
+                    "items": 2,
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WaterWiz - Простая 1С для теплиц</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/text.css">
+    <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-hidden="true">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-seedling"></i>
+                    Water<span>Wiz</span>
+                </div>
+                <label for="navToggle" class="burger-btn" aria-label="Меню"><i class="fas fa-bars"></i></label>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="nav-link active">Главная</a></li>
+                        <li><a href="about.html" class="nav-link">О нас</a></li>
+                        <li><a href="dashboard.html" class="nav-link">Дашборд</a></li>
+                        <li><a href="storage.html" class="nav-link">Склад</a></li>
+                        <li><a href="water.html" class="nav-link">Полив</a></li>
+                        <li><a href="admin.html" class="nav-link">Админка</a></li>
+                    </ul>
+                </nav>
+                <div class="user-panel">
+                    <a href="user.html" class="user-avatar-link" title="Личный кабинет">
+                        <div class="user-avatar">Г</div>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-overlay">
+                <label for="navToggle" class="nav-close" aria-label="Закрыть"><i class="fas fa-times"></i></label>
+                <div class="nav-overlay-avatar">
+                    <a href="user.html"><div class="user-avatar">Г</div></a>
+                </div>
+                <ul class="nav-overlay-list">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="dashboard.html">Дашборд</a></li>
+                    <li><a href="storage.html">Склад</a></li>
+                    <li><a href="water.html">Полив</a></li>
+                    <li><a href="admin.html">Админка</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content area with all pages -->
+    <main class="container">
+        <!-- Home Page (Landing) -->
+        <section id="index" class="page active">
+            <div class="hero">
+                <h1>WaterWiz - Управление тепличным комплексом</h1>
+                <p>Интеллектуальная система учета и управления тепличным хозяйством. Контролируйте все процессы выращивания овощей в одном приложении.</p>
+                <a href="dashboard.html" class="btn btn-large btn-primary">Начать работу</a>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3>Дашборд</h3>
+                    <p>Мониторинг состояния теплиц в реальном времени с графиками урожайности</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-warehouse"></i>
+                    <h3>Учет склада</h3>
+                    <p>Контроль семян, удобрений и готовой продукции тепличного комплекса</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tint"></i>
+                    <h3>Трекер полива</h3>
+                    <p>Планирование и учет полива для всех теплиц и культур</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users-cog"></i>
+                    <h3>Управление</h3>
+                    <p>Контроль сотрудников и ресурсов тепличного комплекса</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="page-title"><i class="fas fa-farm"></i>Тепличный комплекс</h2>
+                <p>Наш современный тепличный комплекс специализируется на круглогодичном выращивании свежих овощей. Мы используем передовые технологии и экологичные методы выращивания.</p>
+                <div class="farm-grid">
+                    <div class="farm-item">
+                        <div class="farm-icon" style="background: #e8f5e9;">
+                            <i class="fas fa-leaf" style="color: #43a047;"></i>
+                        </div>
+                        <div class="farm-details">
+                            <h3>Огурцы</h3>
+                            <p>720 м²</p>
+                            <p style="font-size: 14px; color: var(--gray); margin-top: 5px;">Коктейльный, короткоплодный, среднеплодный</p>
+                        </div>
+                    </div>
+                    <div class="farm-item">
+                        <div class="farm-icon" style="background: #e8f5e9;">
+                            <i class="fas fa-seedling" style="color: #2e7d32;"></i>
+                        </div>
+                        <div class="farm-details">
+                            <h3>Зелень</h3>
+                            <p>480 м²</p>
+                            <p style="font-size: 14px; color: var(--gray); margin-top: 5px;">Базилик, салаты, укроп, петрушка и др.</p>
+                        </div>
+                    </div>
+                    <div class="farm-item">
+                        <div class="farm-icon" style="background: #f3e5f5;">
+                            <i class="fas fa-carrot" style="color: #8e24aa;"></i>
+                        </div>
+                        <div class="farm-details">
+                            <h3>Редис</h3>
+                            <p>120 м²</p>
+                            <p style="font-size: 14px; color: var(--gray); margin-top: 5px;">Свежий редис круглый год</p>
+                        </div>
+                    </div>
+                    <div class="farm-item">
+                        <div class="farm-icon" style="background: #efebe9;">
+                            <i class="fas fa-leaf" style="color: #5d4037;"></i>
+                        </div>
+                        <div class="farm-details">
+                            <h3>Кабачок</h3>
+                            <p>200 м²</p>
+                            <p style="font-size: 14px; color: var(--gray); margin-top: 5px;">Зелёный и белый</p>
+                        </div>
+                    </div>
+                    <div class="farm-item">
+                        <div class="farm-icon" style="background: #ffebee;">
+                            <i class="fas fa-pepper-hot" style="color: #e53935;"></i>
+                        </div>
+                        <div class="farm-details">
+                            <h3>Томаты</h3>
+                            <p>860 м²</p>
+                            <p style="font-size: 14px; color: var(--gray); margin-top: 5px;">Черри, кистевые, крупноплодные, розовые</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f1f8e9; border-radius: 8px;">
+                    <h3 style="color: var(--dark); margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Технологии выращивания</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-tint" style="color: var(--info); font-size: 20px; margin-right: 10px;"></i>
+                            <span>Капельный полив</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-thermometer-half" style="color: var(--warning); font-size: 20px; margin-right: 10px;"></i>
+                            <span>Автоматический климат-контроль</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-sun" style="color: var(--accent); font-size: 20px; margin-right: 10px;"></i>
+                            <span>LED-досветка растений</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <i class="fas fa-flask" style="color: var(--primary); font-size: 20px; margin-right: 10px;"></i>
+                            <span>Гидропонные системы</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>WaterWiz &copy; 2026 - Простая 1С для теплиц | Тепличный комплекс</p>
+            <p style="margin-top: 8px; font-size: 14px; opacity: 0.8;">Демонстрационная версия системы управления тепличным хозяйством</p>
+        </div>
+    </footer>
+
+    <script src="js/global.js"></script>
+</body>
+</html>
