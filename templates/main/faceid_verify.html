@@ -1,0 +1,113 @@
+{% extends "main/base.html" %}
+{% block title %}WaterWiz - Проверка FaceID{% endblock %}
+
+{% block content %}
+<section class="page active">
+    <h1 class="page-title"><i class="fas fa-shield-halved"></i>Проверка FaceID</h1>
+    <div class="card">
+        <p>Для входа пользователя <strong>{{ phone }}</strong> нужен снимок лица.</p>
+        <div class="alert" style="margin-bottom:12px; border-color: rgba(33,150,243,0.35); background: rgba(33,150,243,0.08);">
+            Порог похожести: <strong>{{ required_pct }}%</strong>.
+            {% if similarity_pct is not None %}
+                Текущий результат: <strong>{{ similarity_pct }}%</strong>.
+                {% if missing_pct %}Не хватает: <strong>{{ missing_pct }}%</strong>.{% endif %}
+            {% endif %}
+        </div>
+        {% if error_msg %}
+            <div class="alert alert-danger">{{ error_msg }}</div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" id="faceidVerifyForm">
+            {% csrf_token %}
+            <input type="hidden" name="captured_image_data" id="capturedImageData">
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-info" id="startCameraBtn"><i class="fas fa-camera"></i> Включить камеру</button>
+            </div>
+            <p id="captureStatus" style="margin-top:8px;color:#666;">Нажмите «Включить камеру» — снимок будет сделан автоматически.</p>
+            <video id="cameraPreview" autoplay playsinline style="width:100%;max-width:520px;border-radius:10px;display:none;margin-top:12px;"></video>
+            <canvas id="captureCanvas" style="display:none;"></canvas>
+
+            <label class="form-label" for="face_image" style="margin-top:12px;">Или загрузите файл</label>
+            <input class="form-input" type="file" id="face_image" name="face_image" accept="image/*">
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="submitBtn" disabled><i class="fas fa-right-to-bracket"></i> Подтвердить вход</button>
+                <a class="btn btn-info" href="{% url 'login' %}">Отмена</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const startBtn = document.getElementById('startCameraBtn');
+    const video = document.getElementById('cameraPreview');
+    const canvas = document.getElementById('captureCanvas');
+    const hidden = document.getElementById('capturedImageData');
+    const fileInput = document.getElementById('face_image');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusEl = document.getElementById('captureStatus');
+    const form = document.getElementById('faceidVerifyForm');
+    const CAPTURE_DELAY_MS = 1500;
+    let stream = null;
+
+    function setReady(msg) {
+        statusEl.textContent = msg;
+        submitBtn.disabled = false;
+    }
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(function (t) { t.stop(); });
+            stream = null;
+        }
+    }
+
+    function captureFrame() {
+        if (!video || !video.videoWidth) return false;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        hidden.value = canvas.toDataURL('image/jpeg', 0.9);
+        if (fileInput) fileInput.value = '';
+        setReady('Снимок готов. Можно подтвердить вход.');
+        return true;
+    }
+
+    startBtn && startBtn.addEventListener('click', async function () {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            video.style.display = 'block';
+            startBtn.disabled = true;
+            statusEl.textContent = 'Камера включена, готовим снимок...';
+            await video.play();
+            await new Promise(function (r) { setTimeout(r, CAPTURE_DELAY_MS); });
+            if (captureFrame()) stopCamera();
+            startBtn.disabled = false;
+        } catch (e) {
+            statusEl.textContent = 'Не удалось получить доступ к камере.';
+            startBtn.disabled = false;
+        }
+    });
+
+    fileInput && fileInput.addEventListener('change', function () {
+        if (fileInput.files && fileInput.files[0]) {
+            hidden.value = '';
+            setReady('Выбран файл: ' + fileInput.files[0].name);
+        }
+    });
+
+    form && form.addEventListener('submit', function (e) {
+        const hasCapture = hidden.value && hidden.value.length > 10;
+        const hasFile = fileInput && fileInput.files && fileInput.files[0];
+        if (!hasCapture && !hasFile) {
+            e.preventDefault();
+            statusEl.textContent = 'Сначала сделайте снимок или выберите файл.';
+        }
+    });
+})();
+</script>
+{% endblock %}

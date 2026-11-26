@@ -1,0 +1,150 @@
+{% extends "main/base.html" %}
+{% block title %}WaterWiz - Настройка FaceID{% endblock %}
+
+{% block content %}
+<section class="page active">
+    <h1 class="page-title"><i class="fas fa-face-smile"></i>Настройка FaceID</h1>
+    <div class="card">
+        <p>Сделайте 3 снимка для настройки распознавания лица. Сидите неподвижно, камера сделает снимки автоматически.</p>
+        {% if error_msg %}
+            <div class="alert alert-danger">{{ error_msg }}</div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" id="faceidForm">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="enable">
+
+            <div id="faceidSetupContainer">
+                <div class="form-actions">
+                    <button type="button" class="btn btn-info" id="startCameraBtn"><i class="fas fa-camera"></i> Включить камеру</button>
+                </div>
+                <video id="cameraPreview" autoplay playsinline style="width:100%;max-width:520px;border-radius:10px;display:none;margin-top:12px;"></video>
+                <canvas id="captureCanvas" style="display:none;"></canvas>
+
+                <div id="progressIndicator" style="display:none; margin-top:16px;">
+                    <p><strong>Снимок <span id="sampleCount">0</span>/3</strong></p>
+                    <div style="width:100%;max-width:520px;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;">
+                        <div id="progressBar" style="width:0%;height:100%;background:#4caf50;border-radius:4px;transition:width 0.3s;"></div>
+                    </div>
+                    <p id="statusText" style="margin-top:8px;color:#666;">Подготовка...</p>
+                </div>
+            </div>
+
+            <label class="form-label" for="face_image">Или загрузите одно фото (без камеры)</label>
+            <input class="form-input" type="file" id="face_image" name="face_image" accept="image/*">
+
+            <div class="form-actions" style="margin-top:16px;">
+                <button type="submit" class="btn btn-primary" id="submitBtn" disabled><i class="fas fa-check"></i> Включить FaceID</button>
+            </div>
+        </form>
+
+        <form method="post" style="margin-top: 10px;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="skip">
+            <button type="submit" class="btn btn-info"><i class="fas fa-forward"></i> Пропустить</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const startBtn = document.getElementById('startCameraBtn');
+    const video = document.getElementById('cameraPreview');
+    const canvas = document.getElementById('captureCanvas');
+    const form = document.getElementById('faceidForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const sampleCountEl = document.getElementById('sampleCount');
+    const progressBar = document.getElementById('progressBar');
+    const statusText = document.getElementById('statusText');
+    const SAMPLES_TOTAL = 3;
+    const CAPTURE_INTERVAL = 1500;
+    let stream = null;
+    let capturedSamples = [];
+    let isCapturing = false;
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(t => t.stop());
+            stream = null;
+        }
+        video.style.display = 'none';
+    }
+
+    startBtn.addEventListener('click', async function () {
+        if (isCapturing) return;
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            video.style.display = 'block';
+            startBtn.disabled = true;
+            isCapturing = true;
+            capturedSamples = [];
+            progressIndicator.style.display = 'block';
+            updateProgress(0, 'Приготовьтесь...');
+
+            await video.play();
+
+            for (let i = 0; i < SAMPLES_TOTAL; i++) {
+                updateProgress(i, `Снимок ${i + 1}/${SAMPLES_TOTAL}...`);
+                await new Promise(r => setTimeout(r, CAPTURE_INTERVAL));
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                const b64 = canvas.toDataURL('image/jpeg', 0.9);
+                capturedSamples.push(b64);
+            }
+
+            updateProgress(SAMPLES_TOTAL, 'Готово!');
+            stopCamera();
+            submitBtn.disabled = false;
+            isCapturing = false;
+
+        } catch (e) {
+            updateProgress(0, 'Ошибка доступа к камере');
+            isCapturing = false;
+            startBtn.disabled = false;
+        }
+    });
+
+    function updateProgress(count, text) {
+        const pct = Math.round((count / SAMPLES_TOTAL) * 100);
+        sampleCountEl.textContent = count;
+        progressBar.style.width = pct + '%';
+        statusText.textContent = text || '';
+    }
+
+    const fileInput = document.getElementById('face_image');
+
+    fileInput && fileInput.addEventListener('change', function () {
+        if (fileInput.files && fileInput.files[0]) {
+            capturedSamples = [];
+            stopCamera();
+            submitBtn.disabled = false;
+            progressIndicator.style.display = 'block';
+            updateProgress(1, 'Будет использован загруженный файл');
+            statusText.textContent = 'Нажмите «Включить FaceID» для сохранения.';
+        }
+    });
+
+    form.addEventListener('submit', function (e) {
+        const hasFile = fileInput && fileInput.files && fileInput.files[0];
+        if (capturedSamples.length === SAMPLES_TOTAL) {
+            for (const b64 of capturedSamples) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'captured_images[]';
+                input.value = b64;
+                form.appendChild(input);
+            }
+        } else if (!hasFile) {
+            e.preventDefault();
+            statusText.textContent = 'Сделайте 3 снимка с камеры или загрузите файл.';
+        }
+    });
+})();
+</script>
+{% endblock %}

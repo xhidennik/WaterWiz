@@ -1,0 +1,315 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+    WaterWiz - Личный кабинет
+{% endblock %}
+
+{% block content %}
+    <section class="page active">
+        <h1 class="page-title"><i class="fas fa-user-circle"></i>Личный кабинет</h1>
+        <div class="user-tabs">
+            <div class="user-tab{% if active_tab == 'user-profile' %} active{% endif %}" data-tab="user-profile">Профиль</div>
+            <div class="user-tab{% if active_tab == 'user-tasks' %} active{% endif %}" data-tab="user-tasks">Задачи</div>
+            <div class="user-tab{% if active_tab == 'user-edit' %} active{% endif %}" data-tab="user-edit">Изменение данных</div>
+        </div>
+
+        <div id="user-profile" class="user-content{% if active_tab == 'user-profile' %} active{% endif %}">
+            <div class="profile-header card">
+                <div class="profile-header__inner">
+                    <div class="profile-avatar" style="{% if user.avatar_bg %}background: {{ user.avatar_bg }};{% endif %}">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="Аватар" class="profile-avatar__img">
+                        {% else %}
+                            <span class="profile-avatar__fallback">{{ user.display_name|slice:":1" }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="profile-header__info">
+                        <h2 class="profile-name">{{ user.display_name }}</h2>
+                        <p class="profile-role">{{ user.phone }}</p>
+                        <p class="profile-org">Ферма «Джей Джи Си Эвергрин»</p>
+                        {% if user.is_online %}
+                            <span class="status status-success profile-status">В сети: {{ user.activity|default:"—" }}</span>
+                        {% else %}
+                            <span class="status status-info profile-status">Неактивен: {{ user.activity|default:"—" }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <div class="card">
+                    <h2 class="card-heading"><i class="fas fa-address-card"></i> Контакты</h2>
+                    <ul class="profile-list">
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:{{ user.email }}">{{ user.email }}</a></li>
+                        <li><i class="fas fa-phone"></i> {{ user.phone }}</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2 class="card-heading"><i class="fas fa-clock"></i> Активность</h2>
+                    <ul class="profile-list">
+                        <li><strong>Последняя активность:</strong> {% if user.last_active_at %}{{ user.last_active_at|date:"d.m.Y, H:i" }}{% else %}—{% endif %}</li>
+                        <li><strong>Всего входов:</strong> {{ user.login_count }}</li>
+                        <li><strong>Статус:</strong> {% if user.is_staff %}Администратор{% else %}Пользователь{% endif %}</li>
+                    </ul>
+                    <div class="form-actions">
+                        <a href="{% url 'logout' %}" class="btn btn-info"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="user-tasks" class="user-content{% if active_tab == 'user-tasks' %} active{% endif %}">
+            <div class="card">
+                <h2 class="card-heading"><i class="fas fa-list-check"></i> Текущие задачи</h2>
+                {% if current_tasks and current_tasks|length > 0 %}
+                    <table>
+                        <thead><tr><th>Дата</th><th>Задача</th><th>Локация</th><th>Статус</th></tr></thead>
+                        <tbody>
+                            {% for t in current_tasks %}
+                                <tr>
+                                    <td>{{ t.date|date:"d.m.Y" }}</td>
+                                    <td>{{ t.title }}</td>
+                                    <td>{{ t.location.name }}</td>
+                                    <td>
+                                        {% if t.status == 'pending' %}<span class="status status-info">Ожидает</span>
+                                        {% elif t.status == 'in_progress' %}<span class="status status-warning">В работе</span>
+                                        {% else %}<span class="status status-success">Выполнено</span>{% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="tasks-empty">Текущих задач нет.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="user-edit" class="user-content{% if active_tab == 'user-edit' %} active{% endif %}">
+            <div class="card">
+                <h2 class="card-heading"><i class="fas fa-user-pen"></i> Редактирование данных</h2>
+                {% if profile_saved %}
+                    <div class="alert" style="margin-bottom: 16px; border-color: rgba(46, 125, 50, 0.35); background: rgba(46, 125, 50, 0.08);">
+                        <strong><i class="fas fa-check-circle"></i> Данные сохранены.</strong>
+                    </div>
+                {% endif %}
+                {% if form.errors %}
+                    <div class="alert alert-danger" style="margin-bottom: 16px;" role="alert">
+                        <strong>Не удалось сохранить:</strong> проверьте поля с ошибками ниже.
+                    </div>
+                {% endif %}
+                <div class="alert" style="margin-bottom: 16px; border-color: rgba(33, 150, 243, 0.35); background: rgba(33, 150, 243, 0.08);">
+                    <strong><i class="fas fa-shield-halved"></i> Проверка по лицу (FaceID):</strong>
+                    {% if user.faceid_enabled %}
+                        <span class="status status-success" style="margin-left: 6px;">включена</span>
+                    {% else %}
+                        <span class="status status-info" style="margin-left: 6px;">отключена</span>
+                    {% endif %}
+                    <p style="margin: 10px 0 0;">
+                        {% if user.faceid_enabled %}
+                            При входе после пароля потребуется подтверждение по фото.
+                        {% else %}
+                            Можно включить второй фактор для дополнительной защиты аккаунта.
+                        {% endif %}
+                    </p>
+                    <div class="form-actions" style="margin-top: 10px; flex-wrap: wrap; gap: 10px;">
+                        <a href="{% url 'faceid_setup' %}" class="btn btn-info">
+                            <i class="fas fa-face-smile"></i>
+                            {% if user.faceid_enabled %}Перенастроить FaceID{% else %}Подключить FaceID{% endif %}
+                        </a>
+                        {% if user.faceid_enabled %}
+                            <a href="{% url 'faceid_test' %}" class="btn btn-success">
+                                <i class="fas fa-vial"></i> Быстрая проверка
+                            </a>
+                            <form method="post" style="display: inline;" onsubmit="return confirm('Отключить проверку по лицу? При следующем входе FaceID запрашиваться не будет.');">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="disable_faceid">
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fas fa-face-frown"></i> Отключить FaceID
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <form method="post" class="profile-edit-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="alert alert-danger" id="formClientError" role="alert" style="display:none; margin-bottom: 12px;"></div>
+                    <label for="phone" class="profile-edit-form__label">Телефон</label>{{ form.phone }}{% if form.phone.errors %}<div class="alert alert-danger" style="margin-top: 10px;">{{ form.phone.errors.0 }}</div>{% endif %}
+                    <label for="email" class="profile-edit-form__label">Почта</label>{{ form.email }}{% if form.email.errors %}<div class="alert alert-danger" style="margin-top: 10px;">{{ form.email.errors.0 }}</div>{% endif %}
+                    <label for="name" class="profile-edit-form__label">Имя</label>{{ form.name }}{% if form.name.errors %}<div class="alert alert-danger" style="margin-top: 10px;">{{ form.name.errors.0 }}</div>{% endif %}
+                    <label for="activity" class="profile-edit-form__label">Активность</label>{{ form.activity }}{% if form.activity.errors %}<div class="alert alert-danger" style="margin-top: 10px;">{{ form.activity.errors.0 }}</div>{% endif %}
+                    <label for="about" class="profile-edit-form__label">О себе</label>{{ form.about }}{% if form.about.errors %}<div class="alert alert-danger" style="margin-top: 10px;">{{ form.about.errors.0 }}</div>{% endif %}
+                    <div class="avatar-uploader">
+                        <div class="avatar-uploader__title">Аватар</div>
+                        <div class="avatar-uploader__preview" id="avatarPreviewBox" style="{% if user.avatar_bg %}background: {{ user.avatar_bg }};{% endif %}">
+                            {% if user.avatar %}<img src="{{ user.avatar.url }}" alt="Превью аватара" class="avatar-uploader__img">{% else %}<div class="avatar-uploader__fallback">{{ user.display_name|slice:":1" }}</div>{% endif %}
+                        </div>
+                        <label class="form-label" for="avatar">Загрузить изображение</label>{{ form.avatar }}{% if form.avatar.errors %}<div class="alert alert-danger" style="margin-top: 10px;">{{ form.avatar.errors.0 }}</div>{% endif %}
+                        <label class="form-label" for="avatar_bg">Цвет фона аватарки (HEX/RGB/RGBA)</label>{{ form.avatar_bg }}{% if form.avatar_bg.errors %}<div class="alert alert-danger" style="margin-top: 10px;">{{ form.avatar_bg.errors.0 }}</div>{% endif %}
+                        <div class="avatar-uploader__row"><label class="form-label avatar-uploader__remove">{{ form.remove_avatar }} Удалить аватар</label></div>
+                        <div class="alert alert-danger" id="avatarClientError" role="alert" style="display:none;"></div>
+                    </div>
+                    <div class="form-actions"><button type="submit" class="btn btn-primary profile-edit-form__submit"><i class="fas fa-save"></i> Сохранить</button></div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        (function () {
+            const tabs = document.querySelectorAll('.user-tab');
+            const contents = document.querySelectorAll('.user-content');
+            const input = document.getElementById('avatar');
+            const previewBox = document.getElementById('avatarPreviewBox');
+            const errorEl = document.getElementById('avatarClientError');
+            const formErrorEl = document.getElementById('formClientError');
+            const MAX_BYTES = 5 * 1024 * 1024;
+            const formEl = document.querySelector('form.profile-edit-form');
+            const phoneEl = document.getElementById('phone');
+            const emailEl = document.getElementById('email');
+            const activityEl = document.getElementById('activity');
+            const aboutEl = document.getElementById('about');
+            const MAX_PHONE = 20;
+            const MAX_EMAIL = 254;
+            const MAX_ACTIVITY = 255;
+            const MAX_ABOUT = 5000;
+            const avatarBgEl = document.getElementById('avatar_bg');
+            const avatarPreviewBox = document.getElementById('avatarPreviewBox');
+            const headerAvatar = document.querySelector('.profile-avatar');
+
+            function showError(msg) {
+                if (!errorEl) return;
+                errorEl.textContent = msg;
+                errorEl.style.display = msg ? 'block' : 'none';
+            }
+
+            function showFormError(msg) {
+                if (!formErrorEl) return;
+                formErrorEl.textContent = msg;
+                formErrorEl.style.display = msg ? 'block' : 'none';
+            }
+
+            function normalizePhoneDigits(value) {
+                return String(value || '').replace(/\D/g, '');
+            }
+
+            function isValidPhone(value) {
+                const digits = normalizePhoneDigits(value);
+                return digits.length >= 10 && digits.length <= 15;
+            }
+
+            function activateTab(tabId) {
+                tabs.forEach(function (t) {
+                    t.classList.toggle('active', t.getAttribute('data-tab') === tabId);
+                });
+                contents.forEach(function (c) {
+                    c.classList.toggle('active', c.id === tabId);
+                });
+            }
+
+            const initialTab = '{{ active_tab|default:"user-profile" }}';
+            if (initialTab) {
+                activateTab(initialTab);
+            }
+
+            tabs.forEach(function (tab) {
+                tab.addEventListener('click', function () {
+                    activateTab(tab.getAttribute('data-tab'));
+                });
+            });
+
+            function setPreviewFromFile(file) {
+                if (!previewBox) return;
+                previewBox.innerHTML = '';
+
+                const img = document.createElement('img');
+                img.className = 'avatar-uploader__img';
+                img.alt = 'Превью аватара';
+                previewBox.appendChild(img);
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            if (input) {
+                input.addEventListener('change', function () {
+                    showError('');
+
+                    const file = input.files && input.files[0] ? input.files[0] : null;
+                    if (!file) return;
+
+                    if (file.size > MAX_BYTES) {
+                        input.value = '';
+                        showError('Файл слишком большой. Максимум 5 МБ.');
+                        return;
+                    }
+
+                    if (file.type && !file.type.startsWith('image/')) {
+                        input.value = '';
+                        showError('Можно загружать только изображения (PNG/JPG и т.п.).');
+                        return;
+                    }
+
+                    setPreviewFromFile(file);
+                });
+            }
+
+            function applyAvatarBg() {
+                const val = avatarBgEl ? (avatarBgEl.value || '').trim() : '';
+                const styleVal = val ? val : '';
+                if (avatarPreviewBox) avatarPreviewBox.style.background = styleVal;
+                if (headerAvatar) headerAvatar.style.background = styleVal;
+            }
+
+            if (avatarBgEl) {
+                avatarBgEl.addEventListener('input', applyAvatarBg);
+                applyAvatarBg();
+            }
+
+            if (formEl) {
+                formEl.addEventListener('submit', function (e) {
+                    showError('');
+                    showFormError('');
+                    if (phoneEl && !isValidPhone(phoneEl.value)) {
+                        e.preventDefault();
+                        showFormError('Некорректный телефон. Укажите 10–15 цифр.');
+                        phoneEl.focus();
+                        return;
+                    }
+                    if (phoneEl && phoneEl.value.length > MAX_PHONE) {
+                        e.preventDefault();
+                        showFormError('Телефон слишком длинный.');
+                        return;
+                    }
+                    if (emailEl && emailEl.value.length > MAX_EMAIL) {
+                        e.preventDefault();
+                        showFormError('Email слишком длинный.');
+                        return;
+                    }
+                    if (activityEl && activityEl.value.length > MAX_ACTIVITY) {
+                        e.preventDefault();
+                        showFormError('Активность слишком длинная.');
+                        return;
+                    }
+                    if (aboutEl && aboutEl.value.length > MAX_ABOUT) {
+                        e.preventDefault();
+                        showFormError('Текст "О себе" слишком длинный.');
+                        return;
+                    }
+                    const file = input && input.files && input.files[0] ? input.files[0] : null;
+                    if (file && file.size > MAX_BYTES) {
+                        e.preventDefault();
+                        showError('Файл слишком большой. Максимум 5 МБ.');
+                        return;
+                    }
+                });
+            }
+        })();
+    </script>
+{% endblock %}

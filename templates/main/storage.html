@@ -1,0 +1,108 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+    WaterWiz - Склад
+{% endblock %}
+
+{% block content %}
+        <!-- Warehouse Page -->
+        <section id="warehouse" class="page active">
+            <h1 class="page-title"><i class="fas fa-warehouse"></i>Склад фермы "Джей Джи Си Эвергрин"</h1>
+
+            <div class="warehouse-tabs">
+                <div class="warehouse-tab active" data-tab="inventory">Инвентарный склад</div>
+                <div class="warehouse-tab" data-tab="products">Продукция фермы</div>
+            </div>
+
+            <div id="inventory" class="warehouse-content active">
+                <div class="card">
+                    <h2 class="card-heading">Инвентарь и материалы</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Ед. изм.</th>
+                                <th>Состояние</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in inventory_items %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unit }}</td>
+                                <td>
+                                    {% if item.status == 'in_stock' %}
+                                        <span class="badge badge-success">В наличии</span>
+                                    {% elif item.status == 'running_low' %}
+                                        <span class="badge badge-warning">Заканчиваются</span>
+                                    {% elif item.status == 'reserved' %}
+                                        <span class="badge badge-secondary">Резерв</span>
+                                    {% else %}
+                                        {{ item.get_status_display }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">Нет товаров в этой категории.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="products" class="warehouse-content">
+                <div class="card">
+                    <h2 class="card-heading">Готовая продукция</h2>
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th class="products-table__img">Фото</th>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Ед. изм.</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in products_items %}
+                            <tr>
+                                <td class="products-table__img">
+                                    <!-- Здесь можно вывести изображение, если добавите поле image_url -->
+                                    <i class="fas fa-box"></i> <!-- заглушка -->
+                                </td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unit }}</td>
+                                <td>
+                                    {% if item.status == 'in_stock' %}
+                                        <span class="badge badge-success">В наличии</span>
+                                    {% elif item.status == 'running_low' %}
+                                        <span class="badge badge-warning">Заканчиваются</span>
+                                    {% elif item.status == 'reserved' %}
+                                        <span class="badge badge-secondary">Резерв</span>
+                                    {% else %}
+                                        {{ item.get_status_display }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">Нет продукции.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'main/js/storage.js' %}"></script>
+    <script src="{% static 'main/js/global.js' %}"></script>
+{% endblock %}

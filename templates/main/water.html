@@ -1,0 +1,144 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+    WaterWiz - Задачи и календарь
+{% endblock %}
+
+{% block content %}
+    <section id="water" class="page active">
+        <h1 class="page-title"><i class="fas fa-tint"></i>Задачи и календарь</h1>
+
+        <div class="warehouse-tabs" aria-label="Вкладки задач">
+            <div class="warehouse-tab active" data-tab="calendar">Календарь</div>
+            <div class="warehouse-tab" data-tab="locations">Локации</div>
+        </div>
+
+        <div id="calendar" class="warehouse-content active">
+            <div class="card">
+                <div class="calendar-picker">
+                    <label for="calendarMonth">Месяц</label>
+                    <select id="calendarMonth" class="calendar-picker__select"></select>
+                    <label for="calendarYear">Год</label>
+                    <select id="calendarYear" class="calendar-picker__select"></select>
+                </div>
+                <div id="calendarGrid" class="calendar"></div>
+                <div class="calendar-legend">
+                    <span class="calendar-legend__item"><span class="calendar-legend__box calendar-legend__box--today"></span>Сегодня</span>
+                    <span class="calendar-legend__item"><span class="calendar-legend__box calendar-legend__box--selected"></span>Выбранный день</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="task-toolbar">
+                    <div class="task-toolbar__left">
+                        <button id="createTaskBtn" type="button" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Создать задачу
+                        </button>
+                    </div>
+                    <div class="task-toolbar__right">
+                        <div class="task-generator">
+                            <label class="form-label" for="genCount" style="margin: 0 8px 0 0;">Генератор</label>
+                            <input id="genCount" type="number" class="form-input" min="1" max="200" value="20" style="max-width: 160px;">
+                            <button id="generateTasksBtn" type="button" class="btn btn-success btn-sm">
+                                <i class="fas fa-wand-magic-sparkles"></i> Сгенерировать
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-filter">
+                    <label for="locationFilter" class="form-label">Локация</label>
+                    <select id="locationFilter" class="form-input">
+                        <option value="">Все локации</option>
+                    </select>
+                </div>
+
+                <h2 class="card-heading" id="tasksDayTitle">Задачи на день</h2>
+                <div id="tasksList" class="tasks-list"></div>
+
+                <div class="alert alert-danger" id="tasksApiError" role="alert" style="display:none;"></div>
+            </div>
+        </div>
+
+        <div id="locations" class="warehouse-content">
+            <div class="card">
+                <h2 class="card-heading"><i class="fas fa-map-marker-alt"></i>Локации</h2>
+                <div id="locationsList" class="locations-list"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal: create/edit task -->
+    <div class="modal-overlay" id="taskModalOverlay"></div>
+    <div class="modal" id="taskModal">
+        <form id="taskForm" method="post">
+            {% csrf_token %}
+            <input type="hidden" id="taskId" value="">
+
+            <h2 class="card-heading" style="margin-top: 0;"><i class="fas fa-list-check"></i><span id="taskModalTitle">Задача</span></h2>
+
+            <label for="taskTitle" class="form-label">Название</label>
+            <input id="taskTitle" name="title" type="text" class="form-input">
+
+            <label for="taskDescription" class="form-label">Описание</label>
+            <textarea id="taskDescription" name="description" class="form-textarea" rows="5"></textarea>
+
+            <label for="taskLocation" class="form-label">Локация</label>
+            <select id="taskLocation" name="location_id" class="form-input"></select>
+
+            <label for="taskExecutor" class="form-label">Исполнитель</label>
+            <select id="taskExecutor" name="executor_id" class="form-input"></select>
+
+            <div class="task-form-row">
+                <div class="task-form-col">
+                    <label for="taskDate" class="form-label">Дата</label>
+                    <input id="taskDate" name="date" type="date" class="form-input">
+                </div>
+                <div class="task-form-col">
+                    <label for="taskDurationDays" class="form-label">Дедлайн (дней)</label>
+                    <input id="taskDurationDays" name="duration_days" type="number" class="form-input" min="1" max="365" value="1">
+                </div>
+            </div>
+
+            <div class="task-form-row">
+                <div class="task-form-col">
+                    <label for="taskStatus" class="form-label">Статус</label>
+                    <select id="taskStatus" name="status" class="form-input">
+                        <option value="pending">Ожидает</option>
+                        <option value="in_progress">В работе</option>
+                        <option value="done">Выполнено</option>
+                    </select>
+                </div>
+                <div class="task-form-col">
+                    <label for="taskPriority" class="form-label">Приоритет</label>
+                    <select id="taskPriority" name="priority" class="form-input">
+                        <option value="low">Низкий</option>
+                        <option value="medium">Средний</option>
+                        <option value="high">Высокий</option>
+                        <option value="critical">Критический</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button id="taskSaveBtn" type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Сохранить
+                </button>
+                <button id="taskCancelBtn" type="button" class="btn btn-info">
+                    <i class="fas fa-times"></i> Отмена
+                </button>
+            </div>
+
+            <div class="alert alert-danger" id="taskFormError" role="alert" style="display:none;"></div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'main/js/data-task.js' %}"></script>
+    <script src="{% static 'main/js/calendar.js' %}"></script>
+    <script src="{% static 'main/js/task.js' %}"></script>
+    <script src="{% static 'main/js/global.js' %}"></script>
+{% endblock %}
+

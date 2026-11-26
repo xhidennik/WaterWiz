@@ -1,0 +1,123 @@
+/* Page title */
+.page-title {
+    font-size: 32px;
+    margin-bottom: 25px;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+}
+
+.page-title i {
+    margin-right: 15px;
+    font-size: 36px;
+    color: var(--primary);
+}
+
+/* Hero typography */
+.hero h1 {
+    font-size: 48px;
+}
+
+.hero p {
+    font-size: 24px;
+}
+
+/* Feature card */
+.feature-card h3 {
+    font-size: 24px;
+    color: var(--dark);
+}
+
+/* Stat card */
+.stat-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    color: var(--gray);
+    font-size: 18px;
+}
+
+/* Farm details */
+.farm-details h3 {
+    font-size: 22px;
+}
+
+.farm-details p {
+    color: var(--gray);
+    font-size: 18px;
+}
+
+/* Table header */
+th {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+/* Warehouse tab */
+.warehouse-tab {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.warehouse-tab.active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.admin-tab {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.admin-tab.active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.user-tab {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.user-tab.active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Server stat */
+.server-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.server-stat-label {
+    color: var(--gray);
+    font-size: 18px;
+}
+
+/* Field selector */
+.field-selector label {
+    font-size: 20px;
+    margin-right: 15px;
+    font-weight: 500;
+}
+
+/* Calendar header */
+.calendar-header {
+    font-weight: 600;
+}
+
+/* Card section heading */
+.card-heading {
+    margin-bottom: 15px;
+    color: var(--dark);
+}
+
+/* Warehouse status labels */
+.status-success { color: var(--success); }
+.status-warning { color: var(--warning); }
+.status-info { color: var(--info); }

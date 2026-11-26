@@ -1,0 +1,83 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+    WaterWiz - О нас
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'main/assets/tiny-slider/css/tiny-slider.css' %}">
+{% endblock %}
+
+{% block content %}
+    <main class="container">
+        <section class="page active">
+            <h1 class="page-title"><i class="fas fa-info-circle"></i>О нас</h1>
+
+            <div class="card about-intro">
+                <h2 class="card-heading">О системе WaterWiz</h2>
+                <p>WaterWiz — демонстрационная система учёта и управления для тепличного и фермерского хозяйства. Она объединяет дашборд с показателями урожая и полива, склад инвентаря и продукции, календарь задач и полива, а также блок администрирования. Проект создан как «цифровое» решение для реальных производственных процессов тепличного комплекса.</p>
+            </div>
+
+            <div class="card">
+                <h2 class="card-heading">Фотогалерея</h2>
+                <div class="about-slider-wrap">
+                    <div class="about-slider">
+                        <div class="about-slider__item"><img src="{% static 'main/img/about/1.jpg' %}" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="{% static 'main/img/about/2.jpg' %}" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="{% static 'main/img/about/3.jpg' %}" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="{% static 'main/img/about/4.jpg' %}" alt="JGC Evergreen"></div>
+                        <div class="about-slider__item"><img src="{% static 'main/img/about/5.jpg' %}" alt="JGC Evergreen"></div>
+                    </div>
+                    
+                    <div class="slider-nav">
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                        <div class="slider-nav__dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-heading">О компании</h2>
+                <div class="about-text">
+                    <p><strong>JGC Evergreen</strong> («Джей Джи Си Эвергрин») — один из ведущих локальных производителей свежих овощей и зелени в Хабаровском крае.</p>
+                    <p>Основная деятельность — полный цикл выращивания и реализации экологически чистой овощной продукции и зелени в теплицах четвертого поколения. Компания работает с 2016 года и постоянно расширяет ассортимент, который на сегодня включает 5 видов овощей и 15 сортов зелени.</p>
+                    <p>Компания работает с 2016 года, применяя современные экологичные технологии (например, использование энтомофагов для защиты растений). Продукция JGC Evergreen, отмеченная знаком «Хабаровская марка», поставляется в крупные торговые сети и магазины не только Хабаровска, но и других регионов Дальнего Востока.</p>
+                    <p>Сотрудничество с таким прогрессивным предприятием позволило нашей команде погрузиться в реальные производственные процессы, понять существующие проблемы в учёте, контроле и логистике внутри тепличного хозяйства и предложить собственное, «цифровое» решение.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'main/assets/tiny-slider/js/tiny-slider.js' %}"></script>
+    <script>
+        var slider = tns({
+            container: '.about-slider',
+
+            controls: false,
+            navPosition: 'bottom',
+            navContainer: '.slider-nav',
+            navAsThumbnails: true,
+
+            items: 1,
+            gutter: 20,
+
+            autoplay: false,
+            autoplayTimeout: 3500,
+
+            arrowKeys: true,
+            mouseDrag: true,
+
+            "responsive": {
+                "600": {
+                    "items": 2,
+                }
+            }
+        });
+    </script>
+{% endblock %}

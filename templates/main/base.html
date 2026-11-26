@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>{% block title %}Базовая{% endblock %}</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'main/css/colors.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/buttons.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/blocks.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/text.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/mobile.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <input type="checkbox" id="navToggle" class="nav-toggle-input" aria-hidden="true">
+            <div class="header-content">
+                <a href="{% url 'index' %}" class="logo" title="На главную">
+                    <i class="fas fa-seedling"></i>
+                    Water<span>Wiz</span>
+                </a>
+                <label for="navToggle" class="burger-btn" aria-label="Меню"><i class="fas fa-bars"></i></label>
+                <nav>
+                    <ul>
+                        <li><a href="{% url 'index' %}" class="nav-link">Главная</a></li>
+                        <li><a href="{% url 'about' %}" class="nav-link">О нас</a></li>
+                        <li><a href="{% url 'dashboard' %}" class="nav-link">Дашборд</a></li>
+                        <li><a href="{% url 'storage' %}" class="nav-link">Склад</a></li>
+                        <li><a href="{% url 'water' %}" class="nav-link">Задачи</a></li>
+                        <li><a href="{% url 'adminpanel' %}" class="nav-link">Админка</a></li>
+                    </ul>
+                </nav>
+                <div class="user-panel">
+                    <a href="{% url 'user' %}" class="user-avatar-link" title="Личный кабинет">
+                        <div class="user-avatar" style="{% if user.avatar_bg %}background: {{ user.avatar_bg }};{% endif %}">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}" alt="Аватар" class="user-avatar__img">
+                            {% else %}
+                                {{ user.display_name|slice:":1" }}
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-overlay">
+                <label for="navToggle" class="nav-close" aria-label="Закрыть"><i class="fas fa-times"></i></label>
+                <div class="nav-overlay-avatar">
+                    <a href="{% url 'user' %}">
+                        <div class="user-avatar" style="{% if user.avatar_bg %}background: {{ user.avatar_bg }};{% endif %}">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}" alt="Аватар" class="user-avatar__img">
+                            {% else %}
+                                {{ user.display_name|slice:":1" }}
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+                <ul class="nav-overlay-list">
+                    <li><a href="{% url 'index' %}">Главная</a></li>
+                    <li><a href="{% url 'about' %}">О нас</a></li>
+                    <li><a href="{% url 'dashboard' %}">Дашборд</a></li>
+                    <li><a href="{% url 'storage' %}">Склад</a></li>
+                    <li><a href="{% url 'water' %}">Задачи</a></li>
+                    <li><a href="{% url 'adminpanel' %}">Админка</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        {% block content %}
+        <!-- Основной контент страницы будет здесь -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>WaterWiz &copy; 2026 - Простая 1С для грядок | Ферма "Джей Джи Си Эвергрин"</p>
+            <p style="margin-top: 8px; font-size: 14px; opacity: 0.8;">Демонстрационная версия системы управления сельскохозяйственным производством</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

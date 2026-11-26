@@ -1,0 +1,185 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+    WaterWiz - Хранилище
+{% endblock %}
+
+{% block content %}
+    <main class="container">
+        <!-- Dashboard Page -->
+        <section id="dashboard" class="page active">
+            <h1 class="page-title"><i class="fas fa-tachometer-alt"></i>Дашборд - Тепличный комплекс</h1>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+                    <div class="stat-value">720 м²</div>
+                    <div class="stat-label">Огурцы</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-seedling"></i></div>
+                    <div class="stat-value">480 м²</div>
+                    <div class="stat-label">Зелень</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-carrot"></i></div>
+                    <div class="stat-value">120 м²</div>
+                    <div class="stat-label">Редис</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-leaf"></i></div>
+                    <div class="stat-value">200 м²</div>
+                    <div class="stat-label">Кабачок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-pepper-hot"></i></div>
+                    <div class="stat-value">860 м²</div>
+                    <div class="stat-label">Томаты</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 15px; color: var(--dark);">Динамика урожайности (в этом сезоне)</h2>
+                <div class="chart-container">
+                    <canvas id="yieldChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 15px; color: var(--dark);">Потребление воды по культурам</h2>
+                <div class="chart-container">
+                    <canvas id="waterChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 15px; color: var(--dark);">Распределение площадей теплиц</h2>
+                <div class="chart-container">
+                    <canvas id="resourcesChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+{% endblock %}
+
+{% block extra_js %}
+
+
+   <script src="{% static 'main/js/global.js' %}"></script>
+    <script>
+        // Initialize charts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+        });
+        
+        // Override the initCharts function for this page
+        function initCharts() {
+            // Yield Chart - обновленные данные для тепличных культур
+            const yieldCtx = document.getElementById('yieldChart').getContext('2d');
+            const yieldChart = new Chart(yieldCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь'],
+                    datasets: [
+                        { label: 'Огурцы (кг)', data: [1850, 3650, 5200, 6420, 7450, 8230], borderColor: '#43a047', backgroundColor: 'rgba(67, 160, 71, 0.1)', borderWidth: 3, fill: true, tension: 0.3 },
+                        { label: 'Зелень (кг)', data: [420, 880, 1320, 1780, 2240, 2680], borderColor: '#2e7d32', backgroundColor: 'rgba(46, 125, 50, 0.1)', borderWidth: 3, fill: true, tension: 0.3 },
+                        { label: 'Редис (кг)', data: [320, 650, 980, 1320, 1650, 1980], borderColor: '#8e24aa', backgroundColor: 'rgba(142, 36, 170, 0.1)', borderWidth: 3, fill: true, tension: 0.3 },
+                        { label: 'Кабачок (кг)', data: [280, 560, 840, 1120, 1400, 1680], borderColor: '#5d4037', backgroundColor: 'rgba(93, 64, 55, 0.1)', borderWidth: 3, fill: true, tension: 0.3 },
+                        { label: 'Томаты (кг)', data: [1250, 2850, 4200, 5800, 7350, 8920], borderColor: '#e53935', backgroundColor: 'rgba(229, 57, 53, 0.1)', borderWidth: 3, fill: true, tension: 0.3 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Килограммы'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Water Chart - обновленные данные для тепличных культур
+            const waterCtx = document.getElementById('waterChart').getContext('2d');
+            const waterChart = new Chart(waterCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Огурцы', 'Зелень', 'Редис', 'Кабачок', 'Томаты'],
+                    datasets: [{
+                        label: 'Средний расход воды (л/сутки)',
+                        data: [2850, 1200, 450, 680, 3200],
+                        backgroundColor: ['rgba(67, 160, 71, 0.8)', 'rgba(46, 125, 50, 0.8)', 'rgba(142, 36, 170, 0.8)', 'rgba(93, 64, 55, 0.8)', 'rgba(229, 57, 53, 0.8)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Литры в сутки'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Resources Chart - распределение площадей теплиц
+            const resourcesCtx = document.getElementById('resourcesChart').getContext('2d');
+            const resourcesChart = new Chart(resourcesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Огурцы', 'Зелень', 'Редис', 'Кабачок', 'Томаты'],
+                    datasets: [{
+                        data: [30, 20, 5, 8, 37],
+                        backgroundColor: ['#43a047', '#2e7d32', '#8e24aa', '#5d4037', '#e53935'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.parsed + '%';
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+    </script>
+    
+{% endblock %}
